@@ -2,7 +2,8 @@ name: Daily Auto Commit
 
 on:
   schedule:
-    - cron: "30 11 * * *"   # Runs daily at 11:30 UTC
+    - cron: "30 3 * * *"    # 9:00 AM IST (03:30 UTC)
+    - cron: "30 11 * * *"   # 5:00 PM IST (11:30 UTC)
   workflow_dispatch:
 
 jobs:
@@ -13,11 +14,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: main   # Make sure this is your default branch
+          ref: main   # Change if your default branch is different
 
       - name: Create daily file
         run: |
-          FILE_NAME="daily-$(date +'%Y-%m-%d').txt"
+          FILE_NAME="daily-$(date +'%Y-%m-%d-%H-%M-%S').txt"
           echo "Auto commit on $(date)" > $FILE_NAME
 
       - name: Commit and push changes
@@ -25,5 +26,5 @@ jobs:
           git config --global user.name "syon001"
           git config --global user.email "syonkshantu@gmail.com"
           git add .
-          git commit -m "chore: daily auto commit $(date +'%Y-%m-%d')" || echo "Nothing to commit"
+          git commit -m "chore: auto commit $(date +'%Y-%m-%d %H:%M:%S')" || echo "Nothing to commit"
           git push
